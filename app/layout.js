@@ -29,36 +29,56 @@ export default function RootLayout({ children }) {
 /* ——— Footer (unchanged) ——— */
 function SiteFooter(){
   return (
-    <footer className="mt-24 border-t border-[var(--border-200)] bg-[var(--bg-subtle)]">
-      <div className="container-1200 section grid grid-cols-1 md:grid-cols-4 gap-10">
-        <div className="space-y-4">
-          <Image src="/logo-smc.png" alt="" width={40} height={40} />
-          <p className="text-[var(--ink-600)] text-sm">A welcoming community following Jesus and serving Wichita.</p>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-3 text-[var(--indigo-900)]">Visit</h4>
-          <ul className="space-y-2 text-sm text-[var(--ink-600)]">
-            <li>Sunday Worship — 10:30 AM</li>
-            <li>1018 N. Dellrose, Wichita, KS</li>
-            <li><a className="underline" href="https://maps.google.com" target="_blank">Get Directions</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-3 text-[var(--indigo-900)]">Connect</h4>
-          <ul className="space-y-2 text-sm text-[var(--ink-600)]">
-            <li><a href="/ministries" className="underline">Ministries</a></li>
-            <li><a href="/events" className="underline">Events</a></li>
-            <li><a href="/contact" className="underline">Contact</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 className="font-semibold mb-3 text-[var(--indigo-900)]">Give</h4>
-          <p className="text-[var(--ink-600)] text-sm mb-3">Your generosity fuels ministry and outreach.</p>
-          <a className="btn btn-secondary" href="/give">Give Now</a>
+    <footer className="mt-20 border-t border-[var(--border-200)] bg-[var(--bg-subtle)]">
+      <div className="container-1200 py-10 md:py-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Brand */}
+          <div className="space-y-4 text-center sm:text-left">
+            <Image src="/logo-smc.png" alt="St Mark Cathedral" width={44} height={44} className="mx-auto sm:mx-0" />
+            <p className="text-[var(--ink-600)] text-sm max-w-xs mx-auto sm:mx-0">
+              A welcoming community following Jesus and serving Wichita.
+            </p>
+          </div>
+
+          {/* Visit */}
+          <div className="pt-6 border-t sm:border-0 sm:pt-0 text-center sm:text-left">
+            <h4 className="font-semibold mb-3 text-[var(--indigo-900)]">Visit</h4>
+            <ul className="space-y-2 text-sm text-[var(--ink-600)]">
+              <li>Sunday Worship — 10:30 AM</li>
+              <li>1018 N. Dellrose, Wichita, KS</li>
+              <li>
+                <a className="underline" href="https://maps.google.com" target="_blank" rel="noreferrer">
+                  Get Directions
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Connect */}
+          <div className="pt-6 border-t sm:border-0 sm:pt-0 text-center sm:text-left">
+            <h4 className="font-semibold mb-3 text-[var(--indigo-900)]">Connect</h4>
+            <ul className="space-y-2 text-sm text-[var(--ink-600)]">
+              <li><a href="/ministries" className="underline">Ministries</a></li>
+              <li><a href="/events" className="underline">Events</a></li>
+              <li><a href="/contact" className="underline">Contact</a></li>
+            </ul>
+          </div>
+
+          {/* Give */}
+          <div className="pt-6 border-t sm:border-0 sm:pt-0 text-center sm:text-left">
+            <h4 className="font-semibold mb-3 text-[var(--indigo-900)]">Give</h4>
+            <p className="text-[var(--ink-600)] text-sm mb-3">
+              Your generosity fuels ministry and outreach.
+            </p>
+            <a className="btn btn-secondary w-full sm:w-auto inline-flex justify-center" href="/give">
+              Give Now
+            </a>
+          </div>
         </div>
       </div>
+
       <div className="border-t border-[var(--border-200)] py-4">
-        <div className="container-1200 text-xs text-[var(--ink-600)]">
+        <div className="container-1200 text-center text-xs text-[var(--ink-600)]">
           © {new Date().getFullYear()} St Mark Cathedral (COGIC). All rights reserved.
         </div>
       </div>

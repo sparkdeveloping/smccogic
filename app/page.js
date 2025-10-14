@@ -5,6 +5,7 @@ import Link from "next/link";
 import Reveal from "@/app/components/Reveal";
 import HeroFade from "@/app/components/HeroFade";
 import HoverLift from "@/app/components/HoverLift";
+import { motion } from "framer-motion";
 
 export default function Home() {
   return (
@@ -221,44 +222,61 @@ export default function Home() {
 }
 
 /* ——— Sections ——— */
-
 function Hero() {
   return (
-    <section
-      className="relative h-[68vh] min-h-[460px] flex items-center parallax"
-      style={{
-        backgroundImage: "url('/photos/hero.jpg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
-      aria-label="Welcome"
-    >
-      <div
-        className="absolute inset-0"
-        style={{ background: "linear-gradient(0deg, rgba(43,45,112,0.70), rgba(43,45,112,0.70))" }}
-        aria-hidden="true"
-      />
-      <div className="container-1200 relative">
-        <div className="max-w-2xl text-white">
-          <HeroFade>
-            <p className="uppercase tracking-widest text-sm/none mb-2">Sundays 10:30 AM</p>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ letterSpacing: "-0.01em" }}>
-              A church family in the heart of Wichita
-            </h1>
-            <p className="mt-4 text-lg text-white/90">Encounter Jesus. Grow in community. Make a difference.</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/visit" className="btn btn-primary">
-                Plan Your Visit
-              </Link>
-              <Link href="/give" className="btn btn-secondary">
-                Give
-              </Link>
-            </div>
-          </HeroFade>
+    <>
+      <section
+        className="relative h-[100svh] min-h-[560px] flex items-center parallax"
+        style={{
+          backgroundImage: "url('/photos/hero.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+        aria-label="Welcome"
+      >
+        {/* indigo scrim for legibility */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(0deg, rgba(43,45,112,0.55), rgba(43,45,112,0.55))" }}
+          aria-hidden="true"
+        />
+<div className="container-1200 relative">
+  <div className="max-w-2xl text-white">
+    <HeroFade>
+      <p className="uppercase tracking-widest text-sm/none mb-2 mt-0">Sundays 10:30 AM</p>
+      <h1 className="text-5xl md:text-7xl font-bold tracking-tight mt-0" style={{ letterSpacing: "-0.01em" }}>
+        A church family in the heart of Wichita
+      </h1>
+              <p className="mt-4 text-lg text-white/90">
+                Encounter Jesus. Grow in community. Make a difference.
+              </p>
+              <div className="mt-6 flex flex-wrap gap-3">
+                <Link href="/visit" className="btn bg-white text-[var(--indigo-900)]">Plan Your Visit</Link>
+                <Link href="/give" className="btn btn-secondary">Give</Link>
+              </div>
+            </HeroFade>
+          </div>
         </div>
-      </div>
-    </section>
+
+        {/* Scroll cue */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-xs">
+          <div className="flex flex-col items-center gap-1">
+            <span>Scroll</span>
+            <motion.span
+              aria-hidden
+              animate={{ y: [0, 6, 0], opacity: [0.7, 1, 0.7] }}
+              transition={{ repeat: Infinity, duration: 1.6 }}
+              className="inline-block h-3 w-3 border-b border-r rotate-45"
+              style={{ borderColor: "currentColor" }}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* SENTINEL — header watches this to switch modes */}
+      <div id="after-hero" className="h-px" />
+    </>
   );
 }
 
