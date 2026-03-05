@@ -2,10 +2,30 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+
 import Reveal from "@/app/components/Reveal";
 import HeroFade from "@/app/components/HeroFade";
 import HoverLift from "@/app/components/HoverLift";
-import { motion } from "framer-motion";
+
+/**
+ * HOME — /app/page.jsx
+ * Updates:
+ * - Welcome section image ratio fixed (responsive, no awkward crop).
+ * - Adds a COGIC (Church Of God In Christ) mention + quick descriptors.
+ * - ALL former /messages links now point to /services.
+ * - Keeps full-screen hero with dark overlay + 5-image crossfade carousel.
+ * - Keeps white-strip fix: hero is pulled under sticky header (-mt-16 pt-16).
+ */
+
+const HERO_IMAGES = [
+  "/photos/hero.jpg",
+  "/photos/hero-2.jpg",
+  "/photos/hero-3.jpg",
+  "/photos/hero-4.jpg",
+  "/photos/hero-5.jpg",
+];
 
 export default function Home() {
   return (
@@ -21,20 +41,40 @@ export default function Home() {
                 className="text-3xl md:text-4xl font-semibold tracking-tight"
                 style={{ letterSpacing: "-0.01em", color: "var(--indigo-900)" }}
               >
-                Welcome to St Mark Cathedral
+                Welcome to St Mark Cathedral (COGIC)
               </h2>
+
               <p className="text-[var(--ink-600)] text-lg">
                 We’re a church family pursuing Jesus together—worshipping,
-                growing, and serving our city. Whether it’s your first time or
-                your first time in a while, you’re invited.
+                growing, and serving our city. As part of the{" "}
+                <span className="font-medium text-[var(--ink-900)]">Church Of God In Christ (COGIC)</span>, we’re
+                committed to Spirit-filled worship, biblical teaching, and community outreach.
               </p>
-              <div className="flex flex-wrap gap-3">
+
+              {/* Small value chips (no new components needed) */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {["Spirit-filled worship", "Bible-centered teaching", "COGIC fellowship", "Serving Wichita"].map(
+                  (t) => (
+                    <span
+                      key={t}
+                      className="text-xs md:text-sm rounded-full px-3 py-1 bg-[var(--bg-subtle)] border border-[var(--border-200)] text-[var(--ink-700)]"
+                    >
+                      {t}
+                    </span>
+                  )
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-3 pt-2">
                 <Link href="/visit" className="btn btn-primary">
                   Plan Your Visit
                 </Link>
-                <Link href="/give" className="btn btn-secondary">
-                  Give
+
+                {/* was Give -> Watch, and /messages -> /services */}
+                <Link href="/services" className="btn btn-secondary">
+                  Watch
                 </Link>
+
                 <Link href="/events" className="btn btn-tertiary">
                   See Upcoming Events →
                 </Link>
@@ -44,15 +84,18 @@ export default function Home() {
 
           <Reveal delay={0.08}>
             <HoverLift>
+              {/* Correct ratio: use an aspect box + next/image fill */}
               <div className="card overflow-hidden">
-                <Image
-                  src="/photos/worship-1.jpg"
-                  width={1200}
-                  height={800}
-                  alt="Congregation worshipping at St Mark Cathedral"
-                  className="w-full h-56 md:h-72 lg:h-[22rem] object-cover"
-                  priority
-                />
+                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3]">
+                  <Image
+                    src="/photos/worship-1.jpg"
+                    alt="Congregation worshipping at St Mark Cathedral"
+                    fill
+                    sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 92vw"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
               </div>
             </HoverLift>
           </Reveal>
@@ -153,12 +196,12 @@ export default function Home() {
                       </h3>
                       <p className="text-sm text-[var(--ink-600)] mb-4">{e.date}</p>
                       <div className="flex flex-wrap gap-3">
-                        <a href="/events" className="btn btn-primary">
+                        <Link href="/events" className="btn btn-primary">
                           Details
-                        </a>
-                        <a href="#" className="btn btn-tertiary">
+                        </Link>
+                        <Link href="/events" className="btn btn-tertiary">
                           Add to Calendar →
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </article>
@@ -216,44 +259,78 @@ export default function Home() {
         </div>
       </section>
 
-      <CtaGive />
+      <CtaWatch />
     </>
   );
 }
 
-/* ——— Sections ——— */
+/* ---------------- Hero ---------------- */
+
 function Hero() {
+  const reduce = useReducedMotion();
+  const images = useMemo(() => HERO_IMAGES, []);
+  const [idx, setIdx] = useState(0);
+
+  useEffect(() => {
+    if (reduce) return;
+    const t = setInterval(() => {
+      setIdx((v) => (v + 1) % images.length);
+    }, 6500);
+    return () => clearInterval(t);
+  }, [images.length, reduce]);
+
   return (
     <>
-      <section
-        className="relative h-[100svh] min-h-[560px] flex items-center parallax"
-        style={{
-          backgroundImage: "url('/photos/hero.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundAttachment: "fixed",
-        }}
-        aria-label="Welcome"
-      >
-        {/* indigo scrim for legibility */}
+      <section className="relative h-[100svh] min-h-[560px] flex items-center parallax -mt-16 pt-16" aria-label="Welcome">
+        {/* Background carousel */}
+        <div className="absolute inset-0">
+          <AnimatePresence initial={false}>
+            <motion.div
+              key={images[idx]}
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url('${images[idx]}')`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundAttachment: "fixed",
+              }}
+              initial={reduce ? { opacity: 1 } : { opacity: 0, scale: 1.02 }}
+              animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+              exit={reduce ? { opacity: 1 } : { opacity: 0 }}
+              transition={{ duration: 0.9, ease: "easeOut" }}
+            />
+          </AnimatePresence>
+        </div>
+
+        {/* Dark overlay */}
         <div
           className="absolute inset-0"
-          style={{ background: "linear-gradient(0deg, rgba(43,45,112,0.55), rgba(43,45,112,0.55))" }}
+          style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62), rgba(0,0,0,0.45))" }}
           aria-hidden="true"
         />
-<div className="container-1200 relative">
-  <div className="max-w-2xl text-white">
-    <HeroFade>
-      <p className="uppercase tracking-widest text-sm/none mb-2 mt-0">Sundays 10:30 AM</p>
-      <h1 className="text-5xl md:text-7xl font-bold tracking-tight mt-0" style={{ letterSpacing: "-0.01em" }}>
-        A church family in the heart of Wichita
-      </h1>
+
+        <div className="container-1200 relative">
+          <div className="max-w-2xl text-white">
+            <HeroFade>
+              <p className="uppercase tracking-widest text-sm/none mb-2">Sundays 10:30 AM</p>
+
+              <h1 className="text-5xl md:text-7xl font-bold tracking-tight" style={{ letterSpacing: "-0.01em" }}>
+                A church family in the heart of Wichita
+              </h1>
+
               <p className="mt-4 text-lg text-white/90">
                 Encounter Jesus. Grow in community. Make a difference.
               </p>
+
               <div className="mt-6 flex flex-wrap gap-3">
-                <Link href="/visit" className="btn bg-white text-[var(--indigo-900)]">Plan Your Visit</Link>
-                <Link href="/give" className="btn btn-secondary">Give</Link>
+                <Link href="/visit" className="btn bg-white text-[var(--indigo-900)]">
+                  Plan Your Visit
+                </Link>
+
+                {/* /messages -> /services */}
+                <Link href="/services" className="btn btn-secondary">
+                  Watch
+                </Link>
               </div>
             </HeroFade>
           </div>
@@ -265,8 +342,8 @@ function Hero() {
             <span>Scroll</span>
             <motion.span
               aria-hidden
-              animate={{ y: [0, 6, 0], opacity: [0.7, 1, 0.7] }}
-              transition={{ repeat: Infinity, duration: 1.6 }}
+              animate={reduce ? { opacity: 0.9 } : { y: [0, 6, 0], opacity: [0.7, 1, 0.7] }}
+              transition={reduce ? { duration: 0 } : { repeat: Infinity, duration: 1.6 }}
               className="inline-block h-3 w-3 border-b border-r rotate-45"
               style={{ borderColor: "currentColor" }}
             />
@@ -274,24 +351,14 @@ function Hero() {
         </div>
       </section>
 
-      {/* SENTINEL — header watches this to switch modes */}
       <div id="after-hero" className="h-px" />
     </>
   );
 }
 
-function StatsStrip() {
-  const Item = ({ value, label, i }) => (
-    <Reveal delay={i * 0.05}>
-      <div className="text-center">
-        <div className="text-2xl md:text-3xl font-semibold" style={{ color: "var(--indigo-900)" }}>
-          {value}
-        </div>
-        <div className="text-sm text-[var(--ink-600)]">{label}</div>
-      </div>
-    </Reveal>
-  );
+/* ---------------- Sections ---------------- */
 
+function StatsStrip() {
   const stats = [
     ["60+", "Years of Ministry"],
     ["20+", "Active Ministries"],
@@ -304,8 +371,15 @@ function StatsStrip() {
   return (
     <section className="section">
       <div className="container-1200 grid grid-cols-3 md:grid-cols-6 gap-6">
-        {stats.map(([v, l], i) => (
-          <Item key={l} value={v} label={l} i={i} />
+        {stats.map(([value, label], i) => (
+          <Reveal key={label} delay={i * 0.05}>
+            <div className="text-center">
+              <div className="text-2xl md:text-3xl font-semibold" style={{ color: "var(--indigo-900)" }}>
+                {value}
+              </div>
+              <div className="text-sm text-[var(--ink-600)]">{label}</div>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -318,15 +392,15 @@ function MessageStrip() {
       <div className="container-1200 grid md:grid-cols-2 gap-8 items-center">
         <Reveal>
           <div>
-            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Latest Message</h2>
+            <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">Latest Service</h2>
             <p className="text-white/85 mt-2">Catch up on Sunday’s teaching and share it with a friend.</p>
             <div className="mt-4 flex flex-wrap gap-3">
-              <a href="/messages" className="btn bg-white text-[var(--indigo-900)]">
+              <Link href="/services" className="btn bg-white text-[var(--indigo-900)]">
                 Watch
-              </a>
-              <a href="/messages" className="btn btn-tertiary text-white underline">
-                More messages →
-              </a>
+              </Link>
+              <Link href="/services" className="btn btn-tertiary text-white underline">
+                More services →
+              </Link>
             </div>
           </div>
         </Reveal>
@@ -338,7 +412,7 @@ function MessageStrip() {
                 src="/photos/message-thumb.jpg"
                 width={1200}
                 height={800}
-                alt="Past message thumbnail"
+                alt="Latest service thumbnail"
                 className="w-full h-56 md:h-64 object-cover"
               />
             </div>
@@ -349,21 +423,21 @@ function MessageStrip() {
   );
 }
 
-function CtaGive() {
+function CtaWatch() {
   return (
     <section className="section">
       <Reveal>
         <div className="container-1200 card px-6 py-10 text-center">
           <h2 className="text-2xl md:text-3xl font-semibold" style={{ color: "var(--indigo-900)" }}>
-            Your generosity changes lives.
+            Watch the latest service.
           </h2>
           <p className="text-[var(--ink-600)] mt-2">
-            Give securely online in seconds—recurring options available.
+            Join us online, catch up, and share the word with someone who needs encouragement.
           </p>
           <div className="mt-4">
-            <a href="/give" className="btn btn-secondary">
-              Give Now
-            </a>
+            <Link href="/services" className="btn btn-secondary">
+              Watch Now
+            </Link>
           </div>
         </div>
       </Reveal>

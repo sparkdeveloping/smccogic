@@ -6,6 +6,9 @@ import Reveal from "@/app/components/Reveal";
 import HeroFade from "@/app/components/HeroFade";
 import HoverLift from "@/app/components/HoverLift";
 
+const ADDRESS = "1018 Dellrose, Wichita, KS 67208";
+const MAPS_URL = `https://www.google.com/maps?q=${encodeURIComponent(ADDRESS)}`;
+
 export default function VisitPage() {
   return (
     <>
@@ -17,27 +20,20 @@ export default function VisitPage() {
           {[
             {
               title: "Service Time",
-              body:
-                "Sundays at 10:30 AM (arrive 10–15 mins early for parking & kids check-in).",
+              body: "Sundays at 10:30 AM (arrive 10–15 mins early for parking & kids check-in).",
             },
             {
               title: "Location",
-              body: "1234 Example St, Wichita, KS 672xx",
+              body: ADDRESS,
               footer: (
-                <a
-                  className="btn btn-tertiary"
-                  href="https://maps.google.com"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a className="btn btn-tertiary" href={MAPS_URL} target="_blank" rel="noreferrer">
                   Open in Maps →
                 </a>
               ),
             },
             {
               title: "What to Wear",
-              body:
-                "Come as you are. You’ll see everything from jeans to suits—be comfortable.",
+              body: "Come as you are. You’ll see everything from jeans to suits—be comfortable.",
             },
           ].map((f, i) => (
             <Reveal key={f.title} delay={i * 0.06}>
@@ -62,17 +58,12 @@ export default function VisitPage() {
                 Parking & Entrances
               </h2>
               <p className="text-[var(--ink-600)]">
-                Free parking is available on the north and west lots. Accessible
-                spaces are close to the main entrance. Greeters are ready to help
-                you find seating.
+                Parking is available on the <strong>east side of the building</strong>. You can enter through the{" "}
+                <strong>east (main) entrance</strong> or the <strong>west entrance</strong>. Accessible spaces are close
+                to the main entrance, and greeters are ready to help you find seating.
               </p>
               <div className="flex flex-wrap gap-3">
-                <a
-                  href="https://maps.google.com"
-                  className="btn btn-primary"
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href={MAPS_URL} className="btn btn-primary" target="_blank" rel="noreferrer">
                   Get Directions
                 </a>
                 <Link href="/contact" className="btn btn-tertiary">
@@ -86,11 +77,12 @@ export default function VisitPage() {
             <HoverLift>
               <div className="order-1 lg:order-2 card overflow-hidden">
                 <Image
-                  src="/photos/parking.jpg"
-                  alt="Parking lot and main entrance"
+                  src="/photos/parking.png"
+                  alt="Parking and entrances at St Mark Cathedral"
                   width={1200}
                   height={900}
                   className="w-full h-56 md:h-72 object-cover"
+                  priority
                 />
               </div>
             </HoverLift>
@@ -104,8 +96,8 @@ export default function VisitPage() {
             <HoverLift>
               <div className="card overflow-hidden">
                 <Image
-                  src="/photos/kids-checkin.jpg"
-                  alt="Kids check-in area with friendly volunteers"
+                  src="/photos/kids.jpg"
+                  alt="Kids area at St Mark Cathedral"
                   width={1200}
                   height={900}
                   className="w-full h-56 md:h-72 object-cover"
@@ -124,9 +116,8 @@ export default function VisitPage() {
                 Kids Check-In
               </h2>
               <p className="text-[var(--ink-600)]">
-                Saint Mark Kids is a safe, joyful environment for infants through
-                5th grade. First-time families can register at the desk; our team
-                will print secure name tags and escort you to the classroom.
+                Saint Mark Kids is a safe, joyful environment for infants through 5th grade. First-time families can
+                register at the desk; our team will print secure name tags and escort you to the classroom.
               </p>
               <ul className="list-disc pl-5 text-[var(--ink-600)]">
                 <li>Background-checked volunteers</li>
@@ -152,9 +143,7 @@ export default function VisitPage() {
               >
                 Accessibility
               </h2>
-              <p className="text-[var(--ink-600)]">
-                We’re committed to an accessible experience for everyone.
-              </p>
+              <p className="text-[var(--ink-600)]">We’re committed to an accessible experience for everyone.</p>
               <ul className="list-disc pl-5 text-[var(--ink-600)]">
                 <li>Accessible parking and seating</li>
                 <li>Wheelchair-friendly entrances, aisles, and restrooms</li>
@@ -170,7 +159,7 @@ export default function VisitPage() {
             <HoverLift>
               <div className="card overflow-hidden">
                 <Image
-                  src="/photos/access.jpg"
+                  src="/photos/access.png"
                   alt="Accessible entrance ramp"
                   width={1200}
                   height={900}
@@ -197,23 +186,16 @@ export default function VisitPage() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              {
-                n: "01",
-                title: "Warm Welcome",
-                body:
-                  "Greeters will help with doors, directions, and any questions.",
-              },
+              { n: "01", title: "Warm Welcome", body: "Greeters will help with doors, directions, and any questions." },
               {
                 n: "02",
                 title: "Worship & Teaching",
-                body:
-                  "About 75–90 minutes with live worship and a Christ-centered message.",
+                body: "About 75–90 minutes with live worship and a Christ-centered message.",
               },
               {
                 n: "03",
                 title: "Next Steps",
-                body:
-                  "Stop by the Welcome area to meet leaders and learn how to get connected.",
+                body: "Stop by the Welcome area to meet leaders and learn how to get connected.",
               },
             ].map((s, i) => (
               <Reveal key={s.n} delay={i * 0.06}>
@@ -243,9 +225,7 @@ export default function VisitPage() {
             {FAQS.map((f, i) => (
               <Reveal key={f.q} delay={i * 0.05}>
                 <details className="card p-5 group">
-                  <summary className="cursor-pointer font-medium text-[var(--indigo-900)]">
-                    {f.q}
-                  </summary>
+                  <summary className="cursor-pointer font-medium text-[var(--indigo-900)]">{f.q}</summary>
                   <p className="mt-3 text-[var(--ink-600)]">{f.a}</p>
                 </details>
               </Reveal>
@@ -265,9 +245,7 @@ export default function VisitPage() {
               >
                 Message a Host
               </h2>
-              <p className="text-[var(--ink-600)] mt-2">
-                Have a question before you come? We’d love to help.
-              </p>
+              <p className="text-[var(--ink-600)] mt-2">Have a question before you come? We’d love to help.</p>
               <p className="text-sm text-[var(--ink-600)] mt-2">
                 Prefer email?{" "}
                 <a className="underline" href="mailto:info@smccogic.org">
@@ -278,17 +256,9 @@ export default function VisitPage() {
           </Reveal>
 
           <Reveal delay={0.08}>
-            <form
-              className="card p-6 space-y-4"
-              action="mailto:info@smccogic.org"
-              method="post"
-              encType="text/plain"
-            >
+            <form className="card p-6 space-y-4" action="mailto:info@smccogic.org" method="post" encType="text/plain">
               <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-[var(--indigo-900)]"
-                >
+                <label htmlFor="name" className="block text-sm font-medium text-[var(--indigo-900)]">
                   Name
                 </label>
                 <input
@@ -301,10 +271,7 @@ export default function VisitPage() {
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-[var(--indigo-900)]"
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium text-[var(--indigo-900)]">
                     Email
                   </label>
                   <input
@@ -317,10 +284,7 @@ export default function VisitPage() {
                   />
                 </div>
                 <div>
-                  <label
-                    htmlFor="phone"
-                    className="block text-sm font-medium text-[var(--indigo-900)]"
-                  >
+                  <label htmlFor="phone" className="block text-sm font-medium text-[var(--indigo-900)]">
                     Phone (optional)
                   </label>
                   <input
@@ -332,10 +296,7 @@ export default function VisitPage() {
                 </div>
               </div>
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-sm font-medium text-[var(--indigo-900)]"
-                >
+                <label htmlFor="message" className="block text-sm font-medium text-[var(--indigo-900)]">
                   Message
                 </label>
                 <textarea
@@ -347,9 +308,7 @@ export default function VisitPage() {
                   placeholder="How can we help?"
                 />
               </div>
-              <button className="btn btn-primary w-full md:w-auto">
-                Send Message
-              </button>
+              <button className="btn btn-primary w-full md:w-auto">Send Message</button>
             </form>
           </Reveal>
         </div>
@@ -367,7 +326,7 @@ function Hero() {
     <section
       className="relative h-[56vh] min-h-[420px] flex items-center parallax"
       style={{
-        backgroundImage: "url('/photos/visit-hero.jpg')",
+        backgroundImage: "url('/photos/visit.jpg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
@@ -376,34 +335,22 @@ function Hero() {
     >
       <div
         className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(0deg, rgba(43,45,112,0.70), rgba(43,45,112,0.70))",
-        }}
+        style={{ background: "linear-gradient(0deg, rgba(0,0,0,0.62), rgba(0,0,0,0.62))" }}
         aria-hidden="true"
       />
       <div className="container-1200 relative text-white">
         <HeroFade>
-          <h1
-            className="text-4xl md:text-6xl font-bold tracking-tight"
-            style={{ letterSpacing: "-0.01em" }}
-          >
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight" style={{ letterSpacing: "-0.01em" }}>
             Plan Your Visit
           </h1>
           <p className="mt-3 text-lg text-white/90 max-w-2xl">
-            We can’t wait to meet you. Here’s everything you need for a great
-            first Sunday.
+            We can’t wait to meet you. Here’s everything you need for a great first Sunday.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="#host" className="btn bg-white text-[var(--indigo-900)]">
               Message a Host
             </a>
-            <a
-              href="https://maps.google.com"
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-tertiary text-white underline"
-            >
+            <a href={MAPS_URL} target="_blank" rel="noreferrer" className="btn btn-tertiary text-white underline">
               Directions →
             </a>
           </div>
@@ -451,12 +398,8 @@ function VisitCTA() {
     <section className="section bg-[var(--indigo-900)] text-white text-center">
       <div className="container-1200">
         <Reveal>
-          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">
-            See what’s happening this week
-          </h2>
-          <p className="text-white/85 mt-2">
-            Join a service, group, or outreach opportunity.
-          </p>
+          <h2 className="text-3xl md:text-4xl font-semibold tracking-tight">See what’s happening this week</h2>
+          <p className="text-white/85 mt-2">Join a service, group, or outreach opportunity.</p>
           <div className="mt-4">
             <Link href="/events" className="btn bg-white text-[var(--indigo-900)]">
               Browse Events
