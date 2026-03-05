@@ -86,7 +86,7 @@ export default function Home() {
             <HoverLift>
               {/* Correct ratio: use an aspect box + next/image fill */}
               <div className="card overflow-hidden">
-                <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/3]">
+                <div className="relative w-full aspect-[3/4] sm:aspect-[3/4] lg:aspect-[3/4]">
                   <Image
                     src="/photos/worship-1.jpg"
                     alt="Congregation worshipping at St Mark Cathedral"
